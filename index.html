@@ -8,5 +8,31 @@
     <body>
         <!-- This is a comment -->
         <h1>Hello World!</h1>
+        <div id="note" contenteditable></div>
     </body>
+    <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+    <script>
+        const fs = new Filer.FileSystem(); 
+        window.addEventListener('DOMContentLoaded', (event)=>{
+            console.log('DOM fully loaded and parsed');
+            fs.readFile('/note', 'utf8', function(err,data){
+                if(err){
+                    console.log(err);
+                    document.querySelector('#note').innerHTML = 'Welcome to my notepad!';
+                }
+                if(data){
+                    document.querySelector('#note').innerHTML = data;
+                }
+                else{
+                    document.querySelector('#note').innerHTML = 'Welcome to my notepad!';
+                }
+            })
+        })
+
+        var saveInterval = window.setInterval(function(){
+            fs.writeFile('/note', document.querySelector('#note').innerHTML, function (err) {
+                if (err) throw err;
+            });
+        }, 2000)
+    </script>
 </html>
