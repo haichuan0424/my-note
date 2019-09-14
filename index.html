@@ -3,13 +3,41 @@
 
 <head>
     <meta charset="utf-8">
-    <title>My Web Page</title>
+    <title>My Notepad</title>
+    <link href="https://fonts.googleapis.com/css?family=Manjari&display=swap" rel="stylesheet">
+    <style>
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: green;
+        }
+
+        .note {
+            font-size: 16px;
+            border: ridge;
+            padding: 5px;
+        }
+
+        h1 {
+            font-family: 'Manjari', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
     <!-- This is a comment -->
-    <h1>Hello World!</h1>
-    <div id="note" contenteditable></div>
+    <h1>Welcome to Haichuan He's Notepad</h1>
+    <div id="note" class="note" contenteditable></div>
+    <br>
+    <button type="button" class="button" onclick="saveText()">Save</button>
     <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
     <script>
         const fs = new Filer.FileSystem();
@@ -18,14 +46,14 @@
             fs.readFile('/note', 'utf8', function (err, data) {
                 if (err) {
                     console.log(err);
-                    document.querySelector('#note').innerHTML = 'Welcome to my notepad!';
+                    document.querySelector('#note').innerHTML = '';
                 }
                 else {
                     if (data) {
                         document.querySelector('#note').innerHTML = data;
                     }
                     else {
-                        document.querySelector('#note').innerHTML = 'Welcome to my notepad!';
+                        document.querySelector('#note').innerHTML = '';
                     }
                 }
 
@@ -35,7 +63,13 @@
             fs.writeFile('/note', document.querySelector('#note').innerHTML, function (err) {
                 if (err) throw err;
             });
-        }, 2000)
+        }, 5000)
+        function saveText() {
+            fs.writeFile('/note', document.querySelector('#note').innerHTML, function (err) {
+                if (err) throw err;
+            });
+        }
     </script>
 </body>
+
 </html>
