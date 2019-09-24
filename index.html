@@ -1,82 +1,95 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>My Notepad</title>
-    <link
-      href="https://fonts.googleapis.com/css?family=Manjari&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      .button {
-        background-color: #4caf50;
-        border: none;
-        color: white;
-        padding: 10px 25px;
-        text-align: center;
-        font-size: 16px;
-        cursor: pointer;
-      }
 
-      .button:hover {
-        background-color: green;
-      }
+<head>
+  <meta charset="utf-8" />
+  <title>My Notepad</title>
+  <link href="https://fonts.googleapis.com/css?family=Manjari&display=swap" rel="stylesheet" />
+  <style>
+    .button {
+      background-color: #4caf50;
+      border: none;
+      color: white;
+      padding: 10px 25px;
+      text-align: center;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-      .note {
-        font-size: 16px;
-        border: ridge;
-        padding: 5px;
-      }
+    .button:hover {
+      background-color: green;
+    }
 
-      h1 {
-        font-family: "Manjari", sans-serif;
-      }
-    </style>
-  </head>
+    .note {
+      font-size: 16px;
+      border: ridge;
+      padding: 5px;
+    }
 
-  <body>
-    <!-- This is a comment -->
-    <h1>Welcome to Haichuan He's Notepad</h1>
-    <div id="note" class="note" contenteditable></div>
-    <br />
-    <button type="button" class="button" onclick="saveText()">Save</button>
-    <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
-    <script>
-      const fs = new Filer.FileSystem();
-      window.addEventListener("DOMContentLoaded", event => {
-        console.log("DOM fully loaded and parsed");
-        fs.readFile("/note", "utf8", function(err, data) {
-          if (err) {
-            console.log(err);
-            document.querySelector("#note").innerHTML = "";
+    h1 {
+      font-family: "Manjari", sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- This is a comment -->
+  <h1>Welcome to Haichuan He's Notepad</h1>
+  <div id="note" class="note" contenteditable></div>
+  <br />
+  <button type="button" class="button" onclick="saveText()">Save</button>
+  <button type="button" class="button" onclick="clearText()">Clear</button>
+  <div style=" width: 700px;" id="count"></div>
+  <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+  <script>
+    const fs = new Filer.FileSystem();
+    window.addEventListener("DOMContentLoaded", event => {
+      console.log("DOM fully loaded and parsed");
+      fs.readFile("/note", "utf8", function (err, data) {
+        if (err) {
+          console.log(err);
+          document.querySelector("#note").innerHTML = "Welcome to my notepad!";
+        } else {
+          if (data) {
+            document.querySelector("#note").innerHTML = data;
           } else {
-            if (data) {
-              document.querySelector("#note").innerHTML = data;
-            } else {
-              document.querySelector("#note").innerHTML =
-                "Welcome to my notepad!";
-            }
+            document.querySelector("#note").innerHTML =
+              "Welcome to my notepad!";
           }
-        });
+        }
       });
-      var saveInterval = window.setInterval(function() {
-        fs.writeFile(
-          "/note",
-          document.querySelector("#note").innerHTML,
-          function(err) {
-            if (err) throw err;
-          }
-        );
-      }, 5000);
-      function saveText() {
-        fs.writeFile(
-          "/note",
-          document.querySelector("#note").innerHTML,
-          function(err) {
-            if (err) throw err;
-          }
-        );
-      }
-    </script>
-  </body>
+    });
+    function clearText() {
+      document.querySelector("#note").innerHTML = "cleared!";
+    }
+
+    var countInterval = window.setInterval(wordCount, 150);
+
+    function wordCount() {
+      var count = document.querySelector("#note").innerHTML.trim().replace(/  +/g, ' ').split(' ').length;
+      if (document.querySelector("#note").innerHTML.length == 0) count = 0;
+      document.querySelector("#count").innerHTML = "Word Count: " + count;
+    }
+
+    var saveInterval = window.setInterval(function () {
+      fs.writeFile(
+        "/note",
+        document.querySelector("#note").innerHTML,
+        function (err) {
+          if (err) throw err;
+        }
+      );
+    }, 5000);
+    function saveText() {
+      fs.writeFile(
+        "/note",
+        document.querySelector("#note").innerHTML,
+        function (err) {
+          if (err) throw err;
+        }
+      );
+    }
+  </script>
+</body>
+
 </html>
