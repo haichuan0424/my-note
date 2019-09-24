@@ -48,7 +48,7 @@
       fs.readFile("/note", "utf8", function (err, data) {
         if (err) {
           console.log(err);
-          document.querySelector("#note").innerHTML = "";
+          document.querySelector("#note").innerHTML = "Welcome to my notepad!";
         } else {
           if (data) {
             document.querySelector("#note").innerHTML = data;
